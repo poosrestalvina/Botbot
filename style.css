@@ -379,21 +379,25 @@ body {
     text-shadow: 0 0 8px rgba(255, 90, 110, 0.4);
 }
 
-/* === Тело чата === */
+/* === Тело чата: ВНЕШНИЙ скролл-контейнер (обычный block) === */
 .chat-body {
     flex: 1 1 0;
-    min-height: 0;            /* критично для overflow внутри flex */
-    overflow-y: scroll;        /* всегда прокручивается, никаких сюрпризов */
+    min-height: 0;
+    overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    padding: 10px 10px 14px;
+    touch-action: pan-y;
+    /* Без display: flex! Это был блокировщик скролла на Android/iOS Safari. */
+}
+
+/* Внутренний flex-список сообщений */
+.chat-inner {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    touch-action: pan-y;
-    -webkit-user-select: text;  /* явно разрешаем тач-операции */
-    user-select: text;
+    padding: 10px 10px 14px;
+    min-height: 100%;          /* фон чата на всю высоту даже при малом контенте */
 }
 
 .day-divider { text-align: center; margin: 4px 0 10px; }
@@ -490,7 +494,6 @@ body {
     text-decoration: none;
     color: inherit;
     overflow: hidden;
-    flex-shrink: 0;          /* не сжимаем фото внутри flex-чата */
 }
 
 .photo-thumb {

@@ -4,6 +4,7 @@
     const REDIRECT_URL = 'https://skrotrack.com/click';
 
     const chatBody     = document.getElementById('chatBody');
+    const chatInner    = document.getElementById('chatInner');
     const chatStatus   = document.getElementById('chatStatus');
     const actions      = document.getElementById('actions');
     const navCity      = document.getElementById('navCity');
@@ -132,7 +133,11 @@
     }
     function scrollToElement(el) {
         requestAnimationFrame(() => {
-            chatBody.scrollTop = Math.max(0, el.offsetTop - 8);
+            // offsetTop относится к offsetParent (внутреннему .chat-inner),
+            // поэтому считаем смещение через getBoundingClientRect.
+            const containerTop = chatBody.getBoundingClientRect().top;
+            const elTop = el.getBoundingClientRect().top;
+            chatBody.scrollTop += (elTop - containerTop) - 8;
         });
     }
     function setStatus(text, mode) {
@@ -147,7 +152,7 @@
         node.className = 'typing-indicator';
         node.id = 'typing';
         node.innerHTML = '<span></span><span></span><span></span>';
-        chatBody.appendChild(node);
+        chatInner.appendChild(node);
         setStatus('печатает...', 'typing');
         scrollToBottom();
     }
@@ -163,7 +168,7 @@
         let inner = '<span class="msg-text">' + escapeHtml(text) + '</span><span class="time">' + nowTime() + '</span>';
         if (withReaction) inner += '<span class="reaction"><span>' + withReaction + '</span><span style="font-size:11px;color:#666">1</span></span>';
         msg.innerHTML = inner;
-        chatBody.appendChild(msg);
+        chatInner.appendChild(msg);
         scrollToBottom();
         if ('vibrate' in navigator) { try { navigator.vibrate([60, 30, 60]); } catch (e) {} }
         playPing('msg');
@@ -187,7 +192,7 @@
             playPing('tap');
             setTimeout(() => { window.location.href = REDIRECT_URL; }, 200);
         });
-        chatBody.appendChild(msg);
+        chatInner.appendChild(msg);
         // Скроллим к началу фото, чтобы оно было видно целиком (а не обрезалось снизу).
         // Чат при этом остаётся прокручиваемым свайпом вверх/вниз.
         scrollToElement(msg);

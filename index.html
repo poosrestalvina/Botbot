@@ -135,9 +135,11 @@
             <span class="prox-jealous">💔 пишет ещё <b id="rivals">3</b> парням</span>
         </div>
 
-        <!-- Тело чата -->
+        <!-- Тело чата: внешний скролл-контейнер (block) + внутренний flex-список -->
         <main class="chat-body" id="chatBody">
-            <div class="day-divider"><span>сегодня</span></div>
+            <div class="chat-inner" id="chatInner">
+                <div class="day-divider"><span>сегодня</span></div>
+            </div>
         </main>
 
         <!-- Таймер срочности + кнопки -->
