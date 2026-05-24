@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a0033">
+    <meta name="description" content="Розыгрыш коробки-сюрприза! Открой свой приз прямо сейчас">
+    <title>Mystery Box — Открой свой приз!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        html, body {
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: linear-gradient(135deg, #1a0033 0%, #4a0080 50%, #1a0033 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px 40px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Звезды на фоне */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            font-size: 48px;
+            margin-bottom: 8px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #ffd700, #ffeb3b, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.5;
+            padding: 0 10px;
+        }
+
+        .attempts {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50px;
+            padding: 8px 20px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .attempts-icon {
+            font-size: 18px;
+        }
+
+        .attempts-count {
+            color: #ffd700;
+            font-size: 16px;
+        }
+
+        .boxes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .box {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #ff6b00, #ff3300);
+            border-radius: 16px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow:
+                0 8px 24px rgba(255, 51, 0, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -4px 0 rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+        }
+
+        .box::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.25);
+            transform: translateY(-50%);
+        }
+
+        .box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            bottom: 0;
+            width: 8px;
+            background: rgba(0, 0, 0, 0.25);
+            transform: translateX(-50%);
+        }
+
+        .box-bow {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 32px;
+            z-index: 2;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .box-icon {
+            font-size: 40px;
+            z-index: 1;
+            opacity: 0.9;
+        }
+
+        .box:active:not(.opened):not(.disabled) {
+            transform: scale(0.95);
+        }
+
+        .box.shake {
+            animation: shake 0.5s;
+            background: linear-gradient(135deg, #555, #333);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+            20%, 40%, 60%, 80% { transform: translateX(8px); }
+        }
+
+        .box.opened {
+            background: linear-gradient(135deg, #444, #222);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            cursor: not-allowed;
+        }
+
+        .box.opened .box-bow {
+            display: none;
+        }
+
+        .box.opened .box-icon {
+            opacity: 0.5;
+        }
+
+        .box.winner {
+            animation: winnerPulse 0.6s ease-out;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            box-shadow:
+                0 0 60px rgba(255, 215, 0, 0.9),
+                0 0 100px rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes winnerPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .message {
+            min-height: 24px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 16px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .message.show {
+            opacity: 1;
+        }
+
+        .message.empty {
+            color: #ff6b6b;
+        }
+
+        .message.win {
+            color: #ffd700;
+            font-size: 18px;
+        }
+
+        .hint {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        /* Окно выигрыша */
+        .win-screen {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .win-screen.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .win-content {
+            background: linear-gradient(135deg, #2a0052, #4a0080);
+            border: 2px solid #ffd700;
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            max-width: 360px;
+            width: 100%;
+            position: relative;
+            transform: scale(0.5);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.6);
+        }
+
+        .win-screen.active .win-content {
+            transform: scale(1);
+        }
+
+        .win-emoji {
+            font-size: 80px;
+            margin-bottom: 16px;
+            display: inline-block;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(-5deg); }
+            75% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .win-title {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #ffd700, #ffeb3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .win-text {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .claim-btn {
+            display: block;
+            width: 100%;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, #ff3c00, #ff8c00);
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            box-shadow:
+                0 8px 24px rgba(255, 60, 0, 0.5),
+                inset 0 2px 0 rgba(255, 255, 255, 0.3);
+            animation: pulseBtn 1.5s infinite;
+            transition: transform 0.2s;
+        }
+
+        .claim-btn:active {
+            transform: scale(0.97);
+        }
+
+        @keyframes pulseBtn {
+            0%, 100% {
+                box-shadow:
+                    0 8px 24px rgba(255, 60, 0, 0.5),
+                    0 0 0 0 rgba(255, 215, 0, 0.7),
+                    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+            }
+            50% {
+                box-shadow:
+                    0 8px 24px rgba(255, 60, 0, 0.5),
+                    0 0 0 16px rgba(255, 215, 0, 0),
+                    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        .timer {
+            margin-top: 16px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .timer-count {
+            color: #ff6b6b;
+            font-weight: 700;
+        }
+
+        /* Конфетти */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -20px;
+            z-index: 99;
+            pointer-events: none;
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Безопасность для маленьких экранов */
+        @media (max-width: 360px) {
+            h1 { font-size: 24px; }
+            .logo { font-size: 40px; }
+            .box-icon { font-size: 32px; }
+            .win-title { font-size: 26px; }
+        }
+
+        @media (min-width: 481px) {
+            .boxes-grid {
+                gap: 20px;
+            }
+            .box-icon { font-size: 56px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">🎁</div>
+            <h1>Mystery Box</h1>
+            <p class="subtitle">У тебя <b>3 попытки</b>, чтобы найти приз!<br>Выбери коробку и узнай свою удачу</p>
+        </div>
+
+        <div class="attempts">
+            <span class="attempts-icon">🎯</span>
+            <span>Попыток осталось:</span>
+            <span class="attempts-count" id="attemptsCount">3</span>
+        </div>
+
+        <div class="boxes-grid" id="boxesGrid">
+            <div class="box" data-index="0">
+                <div class="box-bow">🎀</div>
+                <div class="box-icon">📦</div>
+            </div>
+            <div class="box" data-index="1">
+                <div class="box-bow">🎀</div>
+                <div class="box-icon">📦</div>
+            </div>
+            <div class="box" data-index="2">
+                <div class="box-bow">🎀</div>
+                <div class="box-icon">📦</div>
+            </div>
+        </div>
+
+        <div class="message" id="message"></div>
+        <div class="hint">👆 Нажми на коробку, чтобы открыть</div>
+    </div>
+
+    <div class="win-screen" id="winScreen">
+        <div class="win-content">
+            <div class="win-emoji">🎉</div>
+            <div class="win-title">Поздравляем!</div>
+            <div class="win-text">
+                Ты нашёл приз!<br>
+                Забери его прямо сейчас, пока он не достался другому.
+            </div>
+            <a href="[твоя_ссылка]" class="claim-btn" id="claimBtn">
+                🎁 Забрать приз
+            </a>
+            <div class="timer">
+                Приз сгорит через: <span class="timer-count" id="timer">05:00</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // Генерация звезд на фоне
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 40; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                starsContainer.appendChild(star);
+            }
+
+            // Состояние игры
+            let attempts = 0;
+            const maxAttempts = 3;
+            const boxes = document.querySelectorAll('.box');
+            const messageEl = document.getElementById('message');
+            const attemptsCountEl = document.getElementById('attemptsCount');
+            const winScreen = document.getElementById('winScreen');
+            const timerEl = document.getElementById('timer');
+
+            const emptyMessages = [
+                '😔 Пусто! Попробуй ещё раз',
+                '😢 Опять мимо! Осталась последняя попытка'
+            ];
+
+            function vibrate(pattern) {
+                if ('vibrate' in navigator) {
+                    try { navigator.vibrate(pattern); } catch (e) {}
+                }
+            }
+
+            function showMessage(text, type) {
+                messageEl.textContent = text;
+                messageEl.className = 'message show ' + type;
+            }
+
+            function createConfetti() {
+                const colors = ['#ffd700', '#ff3c00', '#ff8c00', '#ffeb3b', '#ff6b6b', '#fff'];
+                const shapes = ['', 'border-radius:50%;', 'border-radius:2px;'];
+                for (let i = 0; i < 80; i++) {
+                    const c = document.createElement('div');
+                    c.className = 'confetti';
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                    c.style.cssText += `background:${color};${shape}`;
+                    c.style.left = Math.random() * 100 + 'vw';
+                    c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    c.style.animationDelay = Math.random() * 0.5 + 's';
+                    c.style.width = (Math.random() * 8 + 6) + 'px';
+                    c.style.height = (Math.random() * 8 + 6) + 'px';
+                    document.body.appendChild(c);
+                    setTimeout(() => c.remove(), 5000);
+                }
+            }
+
+            function startTimer() {
+                let seconds = 5 * 60;
+                const interval = setInterval(() => {
+                    if (seconds <= 0) {
+                        clearInterval(interval);
+                        timerEl.textContent = '00:00';
+                        return;
+                    }
+                    seconds--;
+                    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+                    const s = String(seconds % 60).padStart(2, '0');
+                    timerEl.textContent = `${m}:${s}`;
+                }, 1000);
+            }
+
+            function handleBoxClick(e) {
+                const box = e.currentTarget;
+                if (box.classList.contains('opened') || attempts >= maxAttempts) return;
+
+                attempts++;
+                attemptsCountEl.textContent = maxAttempts - attempts;
+
+                if (attempts < maxAttempts) {
+                    // Пустая коробка
+                    box.classList.add('shake');
+                    vibrate(100);
+                    setTimeout(() => {
+                        box.classList.remove('shake');
+                        box.classList.add('opened');
+                        box.querySelector('.box-icon').textContent = '❌';
+                    }, 500);
+                    showMessage(emptyMessages[attempts - 1], 'empty');
+                } else {
+                    // Третья попытка — выигрыш
+                    box.classList.add('winner', 'opened');
+                    box.querySelector('.box-icon').textContent = '🏆';
+                    vibrate([100, 50, 100, 50, 200]);
+                    showMessage('🎊 Ты выиграл приз!', 'win');
+                    createConfetti();
+
+                    // Блокируем оставшиеся коробки
+                    boxes.forEach(b => {
+                        if (!b.classList.contains('opened')) {
+                            b.classList.add('disabled');
+                        }
+                    });
+
+                    setTimeout(() => {
+                        winScreen.classList.add('active');
+                        startTimer();
+                    }, 1200);
+                }
+            }
+
+            boxes.forEach(box => {
+                box.addEventListener('click', handleBoxClick);
+            });
+
+            // Предотвращаем двойной тап для зума на iOS
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', (e) => {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) e.preventDefault();
+                lastTouchEnd = now;
+            }, { passive: false });
+        })();
+    </script>
+</body>
+</html>
