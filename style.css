@@ -14,7 +14,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', sans-serif;
     font-size: 16px;
     color: #000;
-    background: #1a0a1f;
+    background: #0e1116;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -31,11 +31,11 @@ body {
     height: 100dvh;
     max-width: 480px;
     margin: 0 auto;
-    /* Тёплый вечерний градиент — не "дневной" Telegram */
+    /* Тёмно-угольный с тёплыми оранжевыми бликами — "ночной город" */
     background:
-        radial-gradient(ellipse at 30% 20%, rgba(255, 130, 180, 0.12) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(255, 90, 110, 0.10) 0%, transparent 50%),
-        linear-gradient(170deg, #2a1530 0%, #3a1d3a 40%, #4a2545 70%, #5a2a40 100%);
+        radial-gradient(ellipse at 25% 15%, rgba(255, 87, 34, 0.10) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 85%, rgba(255, 23, 68, 0.08) 0%, transparent 50%),
+        linear-gradient(170deg, #14181F 0%, #1A2030 50%, #161B26 100%);
     position: relative;
     overflow: hidden;
 }
@@ -45,7 +45,9 @@ body {
     position: fixed;
     inset: 0;
     z-index: 1000;
-    background: linear-gradient(135deg, #FF3366 0%, #C71585 50%, #6A0DAD 100%);
+    background:
+        radial-gradient(ellipse at 50% 30%, rgba(255, 152, 0, 0.4) 0%, transparent 60%),
+        linear-gradient(135deg, #FF5722 0%, #C62828 50%, #1A237E 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -97,10 +99,10 @@ body {
     font-size: 56px;
     font-weight: 900;
     font-style: italic;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
     letter-spacing: -1px;
     margin-bottom: 8px;
-    background: linear-gradient(180deg, #fff 0%, #ffd0e0 100%);
+    background: linear-gradient(180deg, #fff 0%, #FFD180 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -110,7 +112,7 @@ body {
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 32px;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
 .match-row {
@@ -127,7 +129,7 @@ body {
     border-radius: 50%;
     overflow: hidden;
     border: 4px solid #fff;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
     background: #fff;
 }
 
@@ -140,7 +142,7 @@ body {
 .match-heart {
     font-size: 48px;
     animation: matchHeartBeat 1s infinite;
-    filter: drop-shadow(0 4px 12px rgba(255,0,0,0.6));
+    filter: drop-shadow(0 4px 12px rgba(255, 87, 34, 0.8));
 }
 
 @keyframes matchHeartBeat {
@@ -177,7 +179,7 @@ body {
 
 /* === iOS системный статус-бар === */
 .status-bar {
-    background: rgba(0,0,0,0.85);
+    background: rgba(0,0,0,0.9);
     backdrop-filter: blur(10px);
     color: #fff;
     height: 44px;
@@ -220,13 +222,13 @@ body {
     border-radius: 1.5px;
 }
 
-/* === iOS Telegram навигация === */
+/* === iOS Telegram навигация (тёмная брутальная) === */
 .nav-bar {
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 6px 8px 8px;
-    background: rgba(28, 18, 36, 0.85);
+    background: rgba(20, 24, 31, 0.92);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-bottom: 0.5px solid rgba(255,255,255,0.08);
@@ -244,23 +246,23 @@ body {
     border: none;
     padding: 6px 4px;
     cursor: pointer;
-    color: #FF6FA8;
+    color: #FF7043;
     font: inherit;
     font-size: 17px;
     flex-shrink: 0;
 }
 
-.nav-back svg { stroke: #FF6FA8; }
+.nav-back svg { stroke: #FF7043; }
 
 .nav-back-label {
     font-size: 17px;
-    color: #FF6FA8;
+    color: #FF7043;
     margin-left: 2px;
     font-weight: 400;
 }
 
 .nav-badge {
-    background: #FF3B30;
+    background: #FF1744;
     color: #fff;
     font-size: 12px;
     font-weight: 600;
@@ -300,8 +302,8 @@ body {
     transition: color 0.3s;
 }
 
-.nav-status.online { color: #34C759; }
-.nav-status.typing { color: #34C759; font-style: italic; }
+.nav-status.online { color: #4CAF50; }
+.nav-status.typing { color: #4CAF50; font-style: italic; }
 
 .nav-avatar-wrap { width: 36px; height: 36px; flex-shrink: 0; position: relative; }
 .nav-avatar {
@@ -310,7 +312,7 @@ body {
     overflow: hidden;
     background: #ffb6c1;
     display: block;
-    border: 1.5px solid rgba(255,255,255,0.2);
+    border: 1.5px solid rgba(255, 112, 67, 0.4);
 }
 .nav-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -318,8 +320,8 @@ body {
     position: absolute;
     bottom: 0; right: 0;
     width: 11px; height: 11px;
-    background: #34C759;
-    border: 2px solid #1c1224;
+    background: #4CAF50;
+    border: 2px solid #14181F;
     border-radius: 50%;
     opacity: 0;
     transform: scale(0);
@@ -331,15 +333,15 @@ body {
     animation: onlinePulse 2s infinite 0.3s;
 }
 @keyframes onlinePulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7); }
-    50%      { box-shadow: 0 0 0 5px rgba(52, 199, 89, 0); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+    50%      { box-shadow: 0 0 0 5px rgba(76, 175, 80, 0); }
 }
 
-/* === Геолокация + ревность === */
+/* === Геолокация + ревность (огненный акцент) === */
 .proximity {
-    background: linear-gradient(90deg, rgba(255, 51, 102, 0.18), rgba(255, 100, 60, 0.18));
+    background: linear-gradient(90deg, rgba(255, 87, 34, 0.18), rgba(255, 23, 68, 0.18));
     backdrop-filter: blur(8px);
-    border-bottom: 0.5px solid rgba(255,255,255,0.08);
+    border-bottom: 0.5px solid rgba(255, 87, 34, 0.25);
     padding: 7px 12px;
     font-size: 12.5px;
     color: rgba(255,255,255,0.92);
@@ -372,11 +374,11 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    color: #FFB3BE;
+    color: #FFAB91;
 }
 .prox-jealous b {
-    color: #FF5A6E;
-    text-shadow: 0 0 8px rgba(255, 90, 110, 0.4);
+    color: #FF6B47;
+    text-shadow: 0 0 8px rgba(255, 87, 34, 0.5);
 }
 
 /* === Тело чата: ВНЕШНИЙ скролл-контейнер (обычный block) === */
@@ -397,13 +399,13 @@ body {
     flex-direction: column;
     gap: 4px;
     padding: 10px 10px 14px;
-    min-height: 100%;          /* фон чата на всю высоту даже при малом контенте */
+    min-height: 100%;
 }
 
 .day-divider { text-align: center; margin: 4px 0 10px; }
 .day-divider span {
-    background: rgba(255,255,255,0.12);
-    color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.7);
     font-size: 12px;
     font-weight: 500;
     padding: 4px 10px;
@@ -423,7 +425,7 @@ body {
     font-size: 16px;
     line-height: 1.3;
     word-wrap: break-word;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     position: relative;
     margin-top: 4px;
     margin-left: 4px;
@@ -460,7 +462,7 @@ body {
     border-radius: 12px;
     padding: 2px 7px;
     font-size: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     display: inline-flex;
     align-items: center;
     gap: 2px;
@@ -499,14 +501,13 @@ body {
 .photo-thumb {
     position: relative;
     width: 100%;
-    aspect-ratio: 4 / 5;     /* раньше 3/4 — теперь короче, помещается на коротких экранах */
+    aspect-ratio: 4 / 5;
     border-radius: 14px;
     overflow: hidden;
     background: linear-gradient(135deg, #ffb3c6 0%, #ff7a98 35%, #c44569 75%, #6c2848 100%);
 }
 
 .photo-thumb::before {
-    /* псевдо-силуэт под blur */
     content: '';
     position: absolute;
     inset: 0;
@@ -525,7 +526,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    background: rgba(0,0,0,0.35);
+    background: rgba(0,0,0,0.4);
     color: #fff;
     backdrop-filter: blur(2px);
     text-align: center;
@@ -534,7 +535,7 @@ body {
 
 .photo-lock-icon {
     font-size: 32px;
-    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+    filter: drop-shadow(0 2px 6px rgba(255, 87, 34, 0.6));
     animation: lockShake 2s infinite;
 }
 
@@ -547,7 +548,7 @@ body {
 .photo-lock-text {
     font-size: 13px;
     font-weight: 600;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
 }
 
 .photo-caption {
@@ -565,7 +566,7 @@ body {
     border-radius: 18px;
     border-bottom-left-radius: 5px;
     padding: 12px 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     display: flex;
     gap: 4px;
     margin-top: 4px;
@@ -587,26 +588,26 @@ body {
     30%           { transform: translateY(-5px); opacity: 1; }
 }
 
-/* === Таймер срочности === */
+/* === Таймер срочности (огненно-красный) === */
 .urgency {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    background: linear-gradient(90deg, #FF3366, #FF5A6E);
+    background: linear-gradient(90deg, #FF5722, #FF1744);
     color: #fff;
     padding: 10px 14px;
     border-radius: 12px;
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 4px;
-    box-shadow: 0 4px 16px rgba(255, 51, 102, 0.4);
+    box-shadow: 0 4px 16px rgba(255, 23, 68, 0.4);
     animation: urgPulse 1.6s infinite;
 }
 
 @keyframes urgPulse {
-    0%, 100% { box-shadow: 0 4px 16px rgba(255,51,102,0.4), 0 0 0 0 rgba(255,51,102,0.5); }
-    50%      { box-shadow: 0 4px 16px rgba(255,51,102,0.4), 0 0 0 8px rgba(255,51,102,0); }
+    0%, 100% { box-shadow: 0 4px 16px rgba(255,23,68,0.4), 0 0 0 0 rgba(255,87,34,0.5); }
+    50%      { box-shadow: 0 4px 16px rgba(255,23,68,0.4), 0 0 0 8px rgba(255,87,34,0); }
 }
 
 .urgency b {
@@ -614,7 +615,7 @@ body {
     font-variant-numeric: tabular-nums;
     min-width: 50px;
     display: inline-block;
-    background: rgba(0,0,0,0.25);
+    background: rgba(0,0,0,0.3);
     padding: 2px 8px;
     border-radius: 6px;
     margin-left: 2px;
@@ -630,15 +631,15 @@ body {
 
 .urg-icon { font-size: 16px; }
 
-/* === Кнопки в iOS-стиле === */
+/* === Кнопки в iOS-стиле (тёмная панель) === */
 .actions {
     flex-shrink: 0;
     padding: 10px 12px;
     padding-bottom: max(12px, env(safe-area-inset-bottom));
-    background: rgba(28, 18, 36, 0.92);
+    background: rgba(20, 24, 31, 0.95);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-top: 0.5px solid rgba(255,255,255,0.08);
+    border-top: 0.5px solid rgba(255, 87, 34, 0.15);
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -673,36 +674,39 @@ body {
     opacity: 0.85;
 }
 
+/* Главная кнопка — Tinder-flame оранжевый → красный */
 .btn-primary {
-    background: linear-gradient(135deg, #FF5A8A 0%, #FF3366 50%, #C71585 100%);
+    background: linear-gradient(135deg, #FF9800 0%, #FF5722 50%, #FF1744 100%);
     color: #fff;
-    box-shadow: 0 4px 20px rgba(255, 51, 102, 0.5);
+    box-shadow: 0 4px 20px rgba(255, 87, 34, 0.55);
     animation: pulsePrimary 1.4s infinite;
     overflow: visible;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 @keyframes pulsePrimary {
-    0%, 100% { box-shadow: 0 4px 20px rgba(255,51,102,0.5), 0 0 0 0 rgba(255,51,102,0.6); }
-    50%      { box-shadow: 0 4px 20px rgba(255,51,102,0.5), 0 0 0 12px rgba(255,51,102,0); }
+    0%, 100% { box-shadow: 0 4px 20px rgba(255,87,34,0.55), 0 0 0 0 rgba(255,87,34,0.6); }
+    50%      { box-shadow: 0 4px 20px rgba(255,87,34,0.55), 0 0 0 12px rgba(255,87,34,0); }
 }
 
 /* Read receipts при клике */
 .btn.clicked .btn-label::after {
     content: ' ✓✓';
-    color: #5AC8FA;
+    color: #FFD180;
     margin-left: 6px;
     animation: receiptIn 0.3s;
     font-weight: 700;
 }
 
-.btn-secondary.clicked .btn-label::after { color: #34C759; }
+.btn-secondary.clicked .btn-label::after { color: #4CAF50; }
 
 @keyframes receiptIn {
     from { opacity: 0; transform: scale(0.5); }
     to   { opacity: 1; transform: scale(1); }
 }
 
-/* Летающие сердечки вокруг главной кнопки */
+/* Летающие огоньки/искры вокруг главной кнопки */
 .hearts { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
 .hearts .heart {
     position: absolute;
@@ -710,7 +714,7 @@ body {
     font-size: 18px;
     opacity: 0;
     animation: floatHeart 2.5s infinite ease-out;
-    filter: drop-shadow(0 0 6px rgba(255, 51, 102, 0.7));
+    filter: drop-shadow(0 0 6px rgba(255, 152, 0, 0.8));
 }
 .hearts .heart:nth-child(1) { left:  8%; animation-delay: 0s;   }
 .hearts .heart:nth-child(2) { left: 28%; animation-delay: 0.5s; font-size: 14px; }
@@ -727,9 +731,9 @@ body {
 .btn-label { position: relative; z-index: 1; }
 
 .btn-secondary {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.08);
     color: rgba(255,255,255,0.7);
-    border: 0.5px solid rgba(255,255,255,0.15);
+    border: 0.5px solid rgba(255,255,255,0.12);
 }
 
 /* === Эмодзи-салют === */
@@ -783,7 +787,6 @@ body {
     .msg-photo { max-width: 170px; }
 }
 
-/* На очень коротких экранах ещё уменьшаем фото */
 @media (max-height: 640px) {
     .msg-photo { max-width: 160px; }
     .photo-thumb { aspect-ratio: 5 / 6; }

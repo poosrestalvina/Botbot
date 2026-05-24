@@ -225,7 +225,7 @@
 
     // ===== Эмодзи-салют =====
     function triggerEmojiBurst() {
-        const emojis = ['💖', '❤️', '💕', '💗', '✨', '🎉', '🌹', '😍', '💋'];
+        const emojis = ['🔥', '💥', '✨', '🌟', '⚡', '🔥', '😈', '🍑', '💋'];
         const count = 22;
         for (let i = 0; i < count; i++) {
             const el = document.createElement('span');
@@ -273,7 +273,7 @@
 
     setTimeout(() => {
         hideTyping();
-        addMessage('Привет! Ты из моего города?', '❤️');
+        addMessage('Привет! Ты из моего города?', '🔥');
     }, 5500);
 
     setTimeout(showTyping, 7500);
