@@ -128,6 +128,13 @@
     function scrollToBottom() {
         requestAnimationFrame(() => { chatBody.scrollTop = chatBody.scrollHeight; });
     }
+    function scrollToElement(el) {
+        requestAnimationFrame(() => {
+            // Скроллим так, чтобы элемент оказался у верхней границы видимой области
+            const top = el.offsetTop - 8;
+            chatBody.scrollTo({ top: top, behavior: 'smooth' });
+        });
+    }
     function setStatus(text, mode) {
         chatStatus.textContent = text;
         chatStatus.classList.remove('online', 'typing');
@@ -181,7 +188,9 @@
             setTimeout(() => { window.location.href = REDIRECT_URL; }, 200);
         });
         chatBody.appendChild(msg);
-        scrollToBottom();
+        // Скроллим к началу фото, чтобы оно было видно целиком (а не обрезалось снизу).
+        // Чат при этом остаётся прокручиваемым свайпом вверх/вниз.
+        scrollToElement(msg);
         if ('vibrate' in navigator) { try { navigator.vibrate([80, 40, 80]); } catch (e) {} }
         playPing('msg');
     }
@@ -287,9 +296,11 @@
         });
     });
 
-    // Защита от двойного тапа (зум на iOS)
+    // Защита от двойного тапа (зум на iOS) — но НЕ ломаем скролл внутри чата
     let lastTouchEnd = 0;
     document.addEventListener('touchend', (e) => {
+        // Если тап в области чата — даём прокрутке работать спокойно
+        if (e.target && e.target.closest && e.target.closest('#chatBody')) return;
         const now = Date.now();
         if (now - lastTouchEnd <= 300) e.preventDefault();
         lastTouchEnd = now;

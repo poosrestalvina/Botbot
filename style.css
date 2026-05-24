@@ -377,13 +377,18 @@ body {
 
 /* === Тело чата === */
 .chat-body {
-    flex: 1;
+    flex: 1 1 0;
+    min-height: 0;            /* критично для overflow внутри flex */
     overflow-y: auto;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    padding: 10px 10px 10px;
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
+    padding: 10px 10px 14px;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    touch-action: pan-y;
 }
 
 .day-divider { text-align: center; margin: 4px 0 10px; }
@@ -474,18 +479,19 @@ body {
 /* === Фото-сообщение (locked) === */
 .msg-photo {
     padding: 4px;
-    max-width: 220px;
+    max-width: 200px;
     cursor: pointer;
     display: block;
     text-decoration: none;
     color: inherit;
     overflow: hidden;
+    flex-shrink: 0;          /* не сжимаем фото внутри flex-чата */
 }
 
 .photo-thumb {
     position: relative;
     width: 100%;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 5;     /* раньше 3/4 — теперь короче, помещается на коротких экранах */
     border-radius: 14px;
     overflow: hidden;
     background: linear-gradient(135deg, #ffb3c6 0%, #ff7a98 35%, #c44569 75%, #6c2848 100%);
@@ -766,5 +772,11 @@ body {
     .status-bar { padding: 0 16px; font-size: 15px; }
     .match-title { font-size: 38px; }
     .proximity { font-size: 11.5px; }
-    .msg-photo { max-width: 180px; }
+    .msg-photo { max-width: 170px; }
+}
+
+/* На очень коротких экранах ещё уменьшаем фото */
+@media (max-height: 640px) {
+    .msg-photo { max-width: 160px; }
+    .photo-thumb { aspect-ratio: 5 / 6; }
 }
