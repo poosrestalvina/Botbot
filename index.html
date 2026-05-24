@@ -9,6 +9,27 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Push-уведомление при заходе -->
+    <div class="push-notification" id="pushNotif" hidden>
+        <div class="push-avatar">
+            <svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+                <rect width="100" height="100" fill="url(#pushBg)"/>
+                <defs>
+                    <linearGradient id="pushBg" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#ffb6c1"/>
+                        <stop offset="100%" stop-color="#ff6b9d"/>
+                    </linearGradient>
+                </defs>
+                <text x="50" y="62" text-anchor="middle" font-size="42" font-family="sans-serif" font-weight="700" fill="#fff">A</text>
+            </svg>
+        </div>
+        <div class="push-text">
+            <div class="push-title">Amelie</div>
+            <div class="push-msg">Новое сообщение...</div>
+        </div>
+        <div class="push-time">сейчас</div>
+    </div>
+
     <div class="phone">
         <!-- Шапка чата -->
         <header class="chat-header">
@@ -19,35 +40,51 @@
             </button>
 
             <div class="avatar-wrap">
-                <!-- Замени содержимое .avatar на <img src="..."> со своей картинкой -->
+                <!-- Замени содержимое .avatar на <img src="amelie.jpg" alt="Amelie"> со своей картинкой -->
                 <div class="avatar" aria-hidden="true">
                     <svg viewBox="0 0 100 100" width="100%" height="100%">
                         <defs>
                             <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-                                <stop offset="0%" stop-color="#ffb6c1"/>
-                                <stop offset="100%" stop-color="#ff6b9d"/>
+                                <stop offset="0%" stop-color="#ffd1dc"/>
+                                <stop offset="100%" stop-color="#ff7eb3"/>
+                            </linearGradient>
+                            <linearGradient id="hairGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#8b4a1f"/>
+                                <stop offset="100%" stop-color="#5a2d10"/>
                             </linearGradient>
                         </defs>
                         <rect width="100" height="100" fill="url(#bg)"/>
-                        <!-- волосы сзади -->
-                        <path d="M20 55 Q18 25 50 22 Q82 25 80 55 L82 80 Q70 70 50 70 Q30 70 18 80 Z" fill="#6b3410"/>
+                        <!-- волосы сзади (длинные, с локонами) -->
+                        <path d="M15 60 Q12 25 50 18 Q88 25 85 60 L88 90 Q75 78 65 82 L60 95 L40 95 L35 82 Q25 78 12 90 Z" fill="url(#hairGrad)"/>
                         <!-- лицо -->
-                        <ellipse cx="50" cy="58" rx="20" ry="22" fill="#ffd9b8"/>
-                        <!-- щёки -->
-                        <circle cx="40" cy="63" r="3" fill="#ff9a9a" opacity="0.6"/>
-                        <circle cx="60" cy="63" r="3" fill="#ff9a9a" opacity="0.6"/>
+                        <ellipse cx="50" cy="58" rx="19" ry="22" fill="#ffd9b8"/>
+                        <!-- шея -->
+                        <rect x="44" y="76" width="12" height="8" fill="#f0c4a0"/>
+                        <!-- щёчки (румянец) -->
+                        <ellipse cx="38" cy="64" rx="4" ry="3" fill="#ff9a9a" opacity="0.55"/>
+                        <ellipse cx="62" cy="64" rx="4" ry="3" fill="#ff9a9a" opacity="0.55"/>
                         <!-- глаза -->
-                        <ellipse cx="43" cy="55" rx="2" ry="2.5" fill="#3a2410"/>
-                        <ellipse cx="57" cy="55" rx="2" ry="2.5" fill="#3a2410"/>
-                        <circle cx="43.5" cy="54" r="0.7" fill="#fff"/>
-                        <circle cx="57.5" cy="54" r="0.7" fill="#fff"/>
-                        <!-- брови -->
-                        <path d="M40 50 Q43 48 46 50" stroke="#3a2410" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-                        <path d="M54 50 Q57 48 60 50" stroke="#3a2410" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-                        <!-- губы -->
-                        <path d="M45 67 Q50 70 55 67" stroke="#d6336c" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        <ellipse cx="42" cy="56" rx="2.2" ry="2.8" fill="#3a2410"/>
+                        <ellipse cx="58" cy="56" rx="2.2" ry="2.8" fill="#3a2410"/>
+                        <circle cx="42.6" cy="55" r="0.9" fill="#fff"/>
+                        <circle cx="58.6" cy="55" r="0.9" fill="#fff"/>
+                        <!-- ресницы -->
+                        <path d="M39 53 L40 51 M44 52.5 L44.5 50.5 M55.5 52.5 L55 50.5 M61 53 L60 51" stroke="#3a2410" stroke-width="0.8" stroke-linecap="round"/>
+                        <!-- брови (тонкие, дугой) -->
+                        <path d="M38 50 Q42 47.5 46 50" stroke="#5a2d10" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+                        <path d="M54 50 Q58 47.5 62 50" stroke="#5a2d10" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+                        <!-- нос -->
+                        <path d="M50 60 Q49 64 51 65" stroke="#e8b896" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+                        <!-- губы (полные, розовые) -->
+                        <path d="M44 69 Q47 67 50 68 Q53 67 56 69 Q53 72 50 71 Q47 72 44 69 Z" fill="#e63973"/>
+                        <path d="M46 69 Q50 70.5 54 69" stroke="#c42858" stroke-width="0.5" fill="none"/>
                         <!-- чёлка -->
-                        <path d="M28 45 Q40 30 50 35 Q60 30 72 45 Q60 38 50 42 Q40 38 28 45 Z" fill="#6b3410"/>
+                        <path d="M30 48 Q40 32 50 38 Q60 32 70 48 Q60 40 52 44 Q44 40 30 48 Z" fill="url(#hairGrad)"/>
+                        <!-- блик на волосах -->
+                        <path d="M35 35 Q40 30 45 33" stroke="#a86840" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.6"/>
+                        <!-- серёжка -->
+                        <circle cx="32" cy="68" r="1.2" fill="#ffd700"/>
+                        <circle cx="68" cy="68" r="1.2" fill="#ffd700"/>
                     </svg>
                 </div>
                 <span class="online-dot" aria-hidden="true"></span>
@@ -79,7 +116,14 @@
         <!-- Кнопки выбора -->
         <div class="actions" id="actions" hidden>
             <a href="[ТВОЯ_ССЫЛКА]" class="btn btn-primary" data-choice="yes">
-                💖 Я не против
+                <span class="hearts" aria-hidden="true">
+                    <span class="heart">❤️</span>
+                    <span class="heart">💕</span>
+                    <span class="heart">💖</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">💗</span>
+                </span>
+                <span class="btn-label">💖 Я не против</span>
             </a>
             <a href="[ТВОЯ_ССЫЛКА]" class="btn btn-secondary" data-choice="no">
                 Нет, я занят

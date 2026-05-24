@@ -4,6 +4,8 @@
     const chatBody = document.getElementById('chatBody');
     const chatStatus = document.getElementById('chatStatus');
     const actions = document.getElementById('actions');
+    const pushNotif = document.getElementById('pushNotif');
+    const pushMsg = pushNotif ? pushNotif.querySelector('.push-msg') : null;
 
     function nowTime() {
         const d = new Date();
@@ -61,11 +63,33 @@
         scrollToBottom();
     }
 
+    function showPush(text) {
+        if (!pushNotif) return;
+        if (pushMsg) pushMsg.textContent = text;
+        pushNotif.hidden = false;
+        // даём браузеру отрисовать состояние, потом включаем анимацию
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => pushNotif.classList.add('show'));
+        });
+        // авто-скрытие через 2.5 секунды
+        setTimeout(() => {
+            pushNotif.classList.remove('show');
+            setTimeout(() => { pushNotif.hidden = true; }, 500);
+        }, 2500);
+
+        if ('vibrate' in navigator) {
+            try { navigator.vibrate([60, 40, 60]); } catch (e) {}
+        }
+    }
+
     // === Сценарий ===
-    // 1. Через 0.4с — индикатор "печатает"
-    // 2. Через 1с от старта — первое сообщение
-    // 3. Ещё через 0.6с — снова "печатает"
-    // 4. Ещё через 1.5с — второе сообщение, появляются кнопки
+    // 0.2с — push-уведомление сверху
+    // 0.4с — индикатор "печатает"
+    // 1.0с — первое сообщение
+    // 1.6с — снова "печатает"
+    // 2.5с — второе сообщение, появляются кнопки
+
+    setTimeout(() => showPush('Привет! Ты из моего города?'), 200);
 
     setTimeout(showTyping, 400);
 
