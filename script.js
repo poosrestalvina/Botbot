@@ -4,8 +4,6 @@
     const chatBody = document.getElementById('chatBody');
     const chatStatus = document.getElementById('chatStatus');
     const actions = document.getElementById('actions');
-    const pushNotif = document.getElementById('pushNotif');
-    const pushMsg = pushNotif ? pushNotif.querySelector('.push-msg') : null;
 
     function nowTime() {
         const d = new Date();
@@ -15,6 +13,8 @@
     }
 
     function showTyping() {
+        // не плодим дублей
+        if (document.getElementById('typing')) return;
         const node = document.createElement('div');
         node.className = 'typing-indicator';
         node.id = 'typing';
@@ -30,12 +30,13 @@
         if (t) t.remove();
         chatStatus.textContent = 'в сети';
         chatStatus.classList.remove('typing');
+        chatStatus.classList.add('online');
     }
 
     function addMessage(text) {
         const msg = document.createElement('div');
         msg.className = 'msg';
-        msg.innerHTML = `${escapeHtml(text)}<span class="time">${nowTime()}</span>`;
+        msg.innerHTML = `<span class="msg-text">${escapeHtml(text)}</span><span class="time">${nowTime()}</span>`;
         chatBody.appendChild(msg);
         scrollToBottom();
 
@@ -52,7 +53,6 @@
     }
 
     function scrollToBottom() {
-        // Небольшая задержка, чтобы DOM успел обновиться
         requestAnimationFrame(() => {
             chatBody.scrollTop = chatBody.scrollHeight;
         });
@@ -63,51 +63,30 @@
         scrollToBottom();
     }
 
-    function showPush(text) {
-        if (!pushNotif) return;
-        if (pushMsg) pushMsg.textContent = text;
-        pushNotif.hidden = false;
-        // даём браузеру отрисовать состояние, потом включаем анимацию
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => pushNotif.classList.add('show'));
-        });
-        // авто-скрытие через 2.5 секунды
-        setTimeout(() => {
-            pushNotif.classList.remove('show');
-            setTimeout(() => { pushNotif.hidden = true; }, 500);
-        }, 2500);
+    // === Сценарий с увеличенными паузами ===
+    // Чувствуется как реальная переписка: девушка действительно "печатает"
+    //
+    //   t=1.5с  → начинает печатать
+    //   t=3.0с  → 1-е сообщение: "Привет! Ты из моего города?"
+    //   t=5.5с  → снова печатает (пауза перед вторым)
+    //   t=8.0с  → 2-е сообщение + появляются кнопки
 
-        if ('vibrate' in navigator) {
-            try { navigator.vibrate([60, 40, 60]); } catch (e) {}
-        }
-    }
-
-    // === Сценарий ===
-    // 0.2с — push-уведомление сверху
-    // 0.4с — индикатор "печатает"
-    // 1.0с — первое сообщение
-    // 1.6с — снова "печатает"
-    // 2.5с — второе сообщение, появляются кнопки
-
-    setTimeout(() => showPush('Привет! Ты из моего города?'), 200);
-
-    setTimeout(showTyping, 400);
+    setTimeout(showTyping, 1500);
 
     setTimeout(() => {
         hideTyping();
         addMessage('Привет! Ты из моего города?');
-    }, 1000);
+    }, 3000);
 
-    setTimeout(showTyping, 1600);
+    setTimeout(showTyping, 5500);
 
     setTimeout(() => {
         hideTyping();
         addMessage('Я тут новенькая, ищу парня для общения прямо сейчас. Ты не против?');
-        setTimeout(showActions, 250);
-    }, 2500);
+        setTimeout(showActions, 400);
+    }, 8000);
 
-    // Клик по любой кнопке ведёт по href из HTML — дополнительная логика не нужна,
-    // но можно добавить тактильный отклик
+    // Тактильный отклик при клике на кнопки
     document.querySelectorAll('.btn').forEach(btn => {
         btn.addEventListener('click', () => {
             if ('vibrate' in navigator) {
