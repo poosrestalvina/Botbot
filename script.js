@@ -126,13 +126,13 @@
         return div.innerHTML;
     }
     function scrollToBottom() {
+        // Без smooth — на мобилках программный плавный скролл может блокировать
+        // последующие пользовательские свайпы.
         requestAnimationFrame(() => { chatBody.scrollTop = chatBody.scrollHeight; });
     }
     function scrollToElement(el) {
         requestAnimationFrame(() => {
-            // Скроллим так, чтобы элемент оказался у верхней границы видимой области
-            const top = el.offsetTop - 8;
-            chatBody.scrollTo({ top: top, behavior: 'smooth' });
+            chatBody.scrollTop = Math.max(0, el.offsetTop - 8);
         });
     }
     function setStatus(text, mode) {
@@ -278,9 +278,12 @@
         addMessage('Я тут новенькая, ищу парня для общения прямо сейчас. Ты не против? 😘');
     }, 10000);
 
-    setTimeout(addPhotoBubble, 11000);
+    // Сначала появляются кнопки (фиксируем layout), потом фото — так оно
+    // гарантированно помещается в видимую область, а пользователь может
+    // свободно скроллить вверх/вниз без скачков высоты.
+    setTimeout(showActions, 10800);
 
-    setTimeout(showActions, 11500);
+    setTimeout(addPhotoBubble, 11200);
 
     // ===== Кнопки: read receipts + редирект =====
     document.querySelectorAll('.btn').forEach(btn => {
@@ -296,13 +299,6 @@
         });
     });
 
-    // Защита от двойного тапа (зум на iOS) — но НЕ ломаем скролл внутри чата
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', (e) => {
-        // Если тап в области чата — даём прокрутке работать спокойно
-        if (e.target && e.target.closest && e.target.closest('#chatBody')) return;
-        const now = Date.now();
-        if (now - lastTouchEnd <= 300) e.preventDefault();
-        lastTouchEnd = now;
-    }, { passive: false });
+    // Защита от двойного тапа делается через viewport meta `maximum-scale=1.0`
+    // — отдельный preventDefault не нужен и может ломать тач-скролл.
 })();

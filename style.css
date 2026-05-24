@@ -15,9 +15,13 @@ body {
     font-size: 16px;
     color: #000;
     background: #1a0a1f;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* user-select только на UI, чат — нет (на iOS Safari это ломает тач-скролл) */
+.status-bar, .nav-bar, .proximity, .actions, .match-overlay {
     -webkit-user-select: none;
     user-select: none;
-    -webkit-font-smoothing: antialiased;
 }
 
 .phone {
@@ -379,16 +383,17 @@ body {
 .chat-body {
     flex: 1 1 0;
     min-height: 0;            /* критично для overflow внутри flex */
-    overflow-y: auto;
+    overflow-y: scroll;        /* всегда прокручивается, никаких сюрпризов */
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    scroll-behavior: smooth;
     padding: 10px 10px 14px;
     display: flex;
     flex-direction: column;
     gap: 4px;
     touch-action: pan-y;
+    -webkit-user-select: text;  /* явно разрешаем тач-операции */
+    user-select: text;
 }
 
 .day-divider { text-align: center; margin: 4px 0 10px; }
